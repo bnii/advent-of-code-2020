@@ -1,11 +1,11 @@
-(ns advent-of-code-2020.day1
+(ns day1
   (:refer-clojure))
 
 (def my-input
   (map
     #(Integer/parseInt %)
     (clojure.string/split
-      (slurp "src/advent_of_code_2020/puzzle1-input.txt")
+      (slurp "src/day1-input.txt")
       #"\n")))
 
 (defn multiply-2020 [s]
