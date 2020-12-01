@@ -1,10 +1,5 @@
-(ns day1
+(ns advent-of-code-2020.day1
   (:refer-clojure))
-
-(defn multiply-2020 [s]
-  (let [num-set         (set s)
-        num-with-friend (first (filter #(num-set (- 2020 %)) s))]
-    (* num-with-friend (- 2020 num-with-friend))))
 
 (def my-input
   (map
@@ -13,4 +8,19 @@
       (slurp "src/advent_of_code_2020/puzzle1-input.txt")
       #"\n")))
 
+(defn multiply-2020 [s]
+  (let [num-set         (set s)
+        num-with-friend (first (filter #(num-set (- 2020 %)) s))]
+    (* num-with-friend (- 2020 num-with-friend))))
+
+(defn multiply-3-2020 [s]
+  (apply * (first (let [num-set (set s)]
+                    (for [n1 s
+                          n2 s
+                          :let [n3 (- 2020 n1 n2)]
+                          :when (num-set n3)]
+                      [n1 n2 n3])))))
+
+
 (multiply-2020 my-input)
+(multiply-3-2020 my-input)
