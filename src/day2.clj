@@ -1,5 +1,6 @@
 (ns day2
-  (:refer-clojure))
+  (:refer-clojure)
+  (:require [common :refer [load-input]]))
 
 (defn extract [st]
   (let [matches (re-matches #"^(\d+)\-(\d+) ([a-zA-Z])\: ([a-zA-Z]*)$" st)]
@@ -12,3 +13,10 @@
   (<= min
       (apply + (map #(if (= char %) 1 0) pass))
       max))
+
+(->>
+  (load-input 2)
+  (map extract)
+  (map is-valid-pass)
+  (filter (comp identity))
+  count)

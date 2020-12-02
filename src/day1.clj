@@ -1,12 +1,6 @@
 (ns day1
-  (:refer-clojure))
-
-(def my-input
-  (map
-    #(Integer/parseInt %)
-    (clojure.string/split
-      (slurp "src/day1-input.txt")
-      #"\n")))
+  (:refer-clojure)
+  (:require [common :refer [load-input-int]]))
 
 (defn multiply-2020 [s]
   (let [num-set         (set s)
@@ -22,5 +16,5 @@
                       [n1 n2 n3])))))
 
 
-(multiply-2020 my-input)
-(multiply-3-2020 my-input)
+(multiply-2020 (load-input-int 1))
+(multiply-3-2020 (load-input-int 1))
