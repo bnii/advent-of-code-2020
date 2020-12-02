@@ -20,3 +20,11 @@
     true 0
     false 1
     true 2))
+
+(deftest is-valid-pass-2-test
+  (are
+    [result n]
+    (= result (if (is-valid-pass-2 (extract (nth example-data n))) true false))
+    true 0
+    false 1
+    false 2))
