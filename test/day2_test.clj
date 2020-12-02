@@ -12,3 +12,11 @@
           :max  3
           :char \a
           :pass "abcde"})))
+
+(deftest is-valid-pass-test
+  (are
+    [result n]
+    (= result (if (is-valid-pass (extract (nth example-data n))) true false))
+    true 0
+    false 1
+    true 2))
