@@ -18,9 +18,9 @@
    ".#..#...#.#"])
 
 (deftest slope-seq-test
-  (is (= (slope-seq example-data) [\. \# \. \# \# \. \# \# \# \#])))
+  (is (= (slope-seq example-data 1 3) [\. \# \. \# \# \. \# \# \# \#])))
 
 (deftest count-trees-test
-  (is (= (count-trees (slope-seq example-data)) 7)))
+  (is (= (count-trees (slope-seq example-data 1 3)) 7)))
 
 
