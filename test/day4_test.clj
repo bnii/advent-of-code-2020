@@ -38,3 +38,15 @@
                                                :iyr "2013"
                                                :pid "028048884"}])))
 
+
+(def valid-data {:byr "1937"
+                 :cid "147"
+                 :ecl "gry"
+                 :eyr "2020"
+                 :hcl "#fffffd"
+                 :hgt "183cm"
+                 :iyr "2017"
+                 :pid "860033327"})
+
+(deftest validate-test
+  (is (validate valid-data)))
