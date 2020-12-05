@@ -25,4 +25,14 @@
                (getseat %)))
        (apply max)))
 
+;;1
 (max-seatid (load-input 5))
+
+;;2
+(def possible-seats-set (set (range 0 1024)))
+(def input-seats-set (set (->> (load-input 5)
+                               (map #(+
+                                       (* (getrow %) 8)
+                                       (getseat %))))))
+(def emptys (apply sorted-set (clojure.set/difference possible-seats-set input-seats-set)))
+(first (remove #(or (emptys (dec %)) (emptys (inc %))) emptys))
