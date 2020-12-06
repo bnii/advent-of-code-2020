@@ -22,4 +22,7 @@
 (deftest solve61-test
   (is (= (solve61 example-data) 11)))
 
+(deftest solve62-test
+  (is (= (solve62 example-data) 6)))
+
 
