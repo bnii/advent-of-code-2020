@@ -4,7 +4,7 @@
             [ubergraph.core :as uber]
             [ubergraph.alg :as alg]))
 
-(defn row->edge
+(defn row->edges
   "returning an sequence of edges of [contained-bag container-bag num-it-can-hold]"
   [row]
   (let [[_ container-bag contained-bags-string] (re-matches #"^(.*) bags? contain (.*)\.$" row)
@@ -13,23 +13,25 @@
          (map #(re-matches #"^(\d+) ([a-z ]+) bags?" %))
          (map (fn [[_ occur bag]] [bag container-bag (Integer/parseInt occur)])))))
 
-(row->edge example-row)
 
-(def graph-init-directed-weighted (apply concat (map row->edge (remove #(re-matches #".*no other.*" %) (load-input 7)))))
-(def bag-containment-graph (apply uber/digraph graph-init-directed-weighted))
+(defn get-graph [rows]
+  (let [graph-init-directed-weighted (apply concat (map row->edges (remove #(re-matches #".*no other.*" %) rows)))]
+    (apply uber/digraph graph-init-directed-weighted)))
+
+(def bag-containment-graph (get-graph (load-input 7)))
 
 ;;1
 (dec (count (alg/topsort bag-containment-graph "shiny gold")))
 
 (def contained-count-by
-  (memoize (fn [node]
-             (let [predecs (uber/predecessors bag-containment-graph node)]
+  (memoize (fn [graph node]
+             (let [predecs (uber/predecessors graph node)]
                (->> predecs
                     (map #(*
-                            (uber/weight bag-containment-graph % node)
-                            (inc (contained-count-by %))))
+                            (uber/weight graph % node)
+                            (inc (contained-count-by graph %))))
                     (apply +))))))
 
 ;;2
-(contained-count-by "shiny gold")
+(contained-count-by bag-containment-graph "shiny gold")
 
