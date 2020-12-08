@@ -10,5 +10,17 @@
 (deftest parse-input-test
   (is (= (parse-input example-data) example-parsed)))
 
-(deftest first-repeating-instr-test
-  (is (= (first-repeating-instr example-parsed) 5)))
+(deftest run-instrs-test
+  (is (=
+        (run-instrs example-parsed)
+        {:type :infinite :acc 5}))
+  (is (=
+        (run-instrs (assoc example-parsed 7 [:nop -4]))
+        {:type :regular :acc 8})))
+
+(deftest find-regular-acc-test
+  (is (=
+        (find-regular-acc example-parsed)
+        8)))
+
+
