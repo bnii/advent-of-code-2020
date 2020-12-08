@@ -24,15 +24,15 @@
 ;; 1
 (run-instrs (parse-input (load-input 8)))
 
-(defn modify-instr [[old-key value]]
-  (case old-key
-    :nop [:jmp value]
-    :jmp [:nop value]
-    [old-key value]))
+(defn modify-instrs [idx instrs]
+  (let [[old-key value] (get instrs idx)]
+    (case old-key
+      :nop (assoc instrs idx [:jmp value])
+      :jmp (assoc instrs idx [:nop value])
+      nil)))
 
 (defn find-regular-acc [instrs]
-  (let [modified-instrs (->> (range (count instrs))
-                             (map #(update instrs % modify-instr)))
+  (let [modified-instrs (keep-indexed modify-instrs (repeat (count instrs) instrs))
         regular-entry   (->> modified-instrs
                              (map run-instrs)
                              (filter #(= (:type %) :regular))
