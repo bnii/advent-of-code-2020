@@ -16,3 +16,7 @@
 (deftest jolt-diffs-test
   (is (= (jolt-diffs example-data) {1 7,3 5}))
   (is (= (jolt-diffs example-data-2) {1 22,3 10})))
+
+(deftest ways-to-reach-test
+  (is (= (ways-to-reach (apply max example-data) (set example-data)) 8))
+  (is (= (ways-to-reach (apply max example-data-2) (set example-data-2)) 19208)))
