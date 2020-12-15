@@ -1,10 +1,10 @@
 (ns common
-  (:refer-clojure))
+  (:refer-clojure)
+  (:require [clojure.java.io :as io]
+            [clojure.string :as s]))
 
 (defn load-input [day]
-  (clojure.string/split
-    (slurp (str "src/day" day "-input.txt"))
-    #"\n"))
+  (s/split-lines (slurp (io/resource (str "day" day "-input.txt")))))
 
 (defn load-input-int [day]
   (map

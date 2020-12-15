@@ -5,7 +5,7 @@
 
 (def day (first *command-line-args*))
 (def session (System/getenv "AOC_SESSION"))
-(def outfile (str "src/day" day "-input.txt"))
+(def outfile (str "resources/day" day "-input.txt"))
 
 (def txt (:body (curl/get
                   (str "https://adventofcode.com/2020/day/" day "/input")
