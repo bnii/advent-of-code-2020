@@ -2,11 +2,9 @@
   (:refer-clojure)
   (:require [common :refer [load-input]]
             [clojure.string :as s]
-            [clojure.set :as set]
-            [clojure.data :as data])) `
+            [clojure.set :as set]))
 
-
-(defn parse-input [input]
+(defn get-input-cells [input dimensions]
   (set (remove
          nil?
          (let [size-y (count input)
@@ -14,63 +12,72 @@
            (for [y (range size-y)
                  x (range size-x)]
              (when (= (get-in input [x y]) \#)
-               [(- x (/ (dec size-x) 2))
-                (- y (/ (dec size-y) 2))
-                0]))))))
+               (into [(- x (/ (dec size-x) 2))
+                      (- y (/ (dec size-y) 2))]
+                     (repeat (- dimensions 2) 0))))))))
 
-(def example-data (s/split-lines ".#.\n..#\n###"))
+(defn get-neigbours [cell]
+  (disj
+    (set (loop [dimension 0
+                ret       [[]]]
+           (if (= dimension (count cell))
+             (map #(map + % cell) ret)
+             (recur
+               (inc dimension)
+               (mapcat
+                 #(map
+                    (fn [v] (conj % v))
+                    [-1 0 1])
+                 ret)))))
+    cell))
 
-(def example-parsed (parse-input example-data))
 
-(defn get-neigbours [[x y z :as cell]]
-  (set (for [xn [(dec x) x (inc x)]
-             yn [(dec y) y (inc y)]
-             zn [(dec z) z (inc z)]
-             :when (not= [xn yn zn] cell)]
-         [xn yn zn])))
-
-(defn candidate-live? [candidate cubes]
+(defn candidate-live? [candidate-cell cells]
   (let [neighbour-count (count
                           (keep
-                            cubes
-                            (get-neigbours candidate)))]
+                            cells
+                            (get-neigbours candidate-cell)))]
     (or
       (and
-        (cubes candidate) (<= 2 neighbour-count 3))
+        (cells candidate-cell) (<= 2 neighbour-count 3))
       (and
-        (not (cubes candidate)) (= neighbour-count 3)))))
+        (not (cells candidate-cell)) (= neighbour-count 3)))))
 
 
-(candidate-live? [0 0 0] example-parsed)
-
-(defn next-round [state]
-  (loop [candidates         state
+(defn next-round [cells]
+  (loop [candidatate-cells  cells
          checked-candidates #{}
          live-cells         #{}]
-    (let [candidate          (first candidates)
-          rest-candidates    (rest candidates)]
+    (let [candidate       (first candidatate-cells)
+          rest-candidates (rest candidatate-cells)]
       (if-not candidate
         live-cells
-        (let [next-candidates         (if (state candidate)
-                                        (into rest-candidates (set/difference
-                                                                (get-neigbours candidate)
-                                                                checked-candidates))
+        (let [next-candidates         (if (cells candidate)
+                                        (into
+                                          rest-candidates
+                                          (set/difference
+                                            (get-neigbours candidate)
+                                            checked-candidates))
                                         rest-candidates)
-              next-live-cells         (if (candidate-live? candidate state)
+              next-live-cells         (if (candidate-live? candidate cells)
                                         (conj live-cells candidate)
                                         live-cells)
               next-checked-candidates (conj checked-candidates candidate)]
           (recur next-candidates next-checked-candidates next-live-cells))))))
 
 
-
 (comment
-  (data/diff
-    example-parsed
-    #{[0 -1 0] [1 0 0] [-1 1 0] [0 1 0] [1 1 0]}
-    (parse-input (s/split-lines ".#.\n...\n...")))
+  (def example-data (s/split-lines ".#.\n..#\n###"))
+  (def example-parsed (get-input-cells example-data 4))
+  (candidate-live? [0 0 0 0] example-parsed)
   (next-round example-parsed)
-  (get-neigbours [1 2 3])
-  (count (nth (iterate next-round example-parsed) 6))
-  (count (nth (iterate next-round (parse-input (load-input 17))) 6)))
+  (get-neigbours [3 4])
+  (count (nth (iterate next-round example-parsed) 6)))
 
+
+
+;;1
+(count (nth (iterate next-round (get-input-cells (load-input 17) 3)) 6))
+
+;;2
+(count (nth (iterate next-round (get-input-cells (load-input 17) 4)) 6))
