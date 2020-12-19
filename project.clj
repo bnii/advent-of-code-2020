@@ -7,5 +7,9 @@
                  [ubergraph "0.8.2"]
                  [org.clojure/math.combinatorics "0.1.6"]
                  [com.clojure-goes-fast/clj-async-profiler "0.4.1"]
-                 [quil "3.1.0"]]
+                 [org.clojure/tools.namespace "1.1.0"]
+                 [quil "3.1.0"]
+                 [instaparse "1.4.10"]]
+
+  :plugins [[lein-marginalia "0.9.1"]]
   :jvm-opts ["-Djdk.attach.allowAttachSelf"])
