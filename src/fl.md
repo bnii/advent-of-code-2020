@@ -1,0 +1,1 @@
+![](.fl_images/day23.png)
