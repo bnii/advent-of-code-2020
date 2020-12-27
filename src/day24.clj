@@ -1,6 +1,7 @@
 (ns day24
   (:refer-clojure)
-  (:require [common :refer [load-input]]))
+  (:require [common :refer [load-input]]
+            [clojure.set :as set]))
 
 
 (defn parse-row
@@ -49,6 +50,47 @@
 
 (defn solve-1 [input]
   (count (calc-blacks input)))
- 
+
 ;;1
 (solve-1 (load-input 24))
+
+(def black-tiles (calc-blacks (load-input 24)))
+
+(defn get-neighbours [[x y]]
+  (let [even+ (if (even? y) 1 0)]
+    #{[(inc x) y]
+      [(+ x even+) (inc y)]
+      [(+ x -1 even+) (inc y)]
+      [(dec x) y]
+      [(+ x -1 even+) (dec y)]
+      [(+ x even+) (dec y)]}))
+
+(defn neighbour-num [black-set [x y]]
+  (->> (get-neighbours [x y])
+       (filter #(black-set %))
+       count))
+
+
+(defn next-state [black-set]
+  (loop [[candidate & next-candidates]
+         (apply set/union black-set (map get-neighbours black-set))
+         next-black-set
+         #{}]
+    (cond
+      (not candidate)
+      next-black-set
+      (and (black-set candidate) (<= 1 (neighbour-num black-set candidate) 2))
+      (recur next-candidates (conj next-black-set candidate))
+      (and (not (black-set candidate)) (= 2 (neighbour-num black-set candidate)))
+      (recur next-candidates (conj next-black-set candidate))
+      :else
+      (recur next-candidates next-black-set))))
+
+
+(defn solve-2 [black-set]
+  (count (nth
+           (iterate next-state black-set)
+           100)))
+
+;;2
+(solve-2 black-tiles)

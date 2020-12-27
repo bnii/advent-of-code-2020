@@ -2,13 +2,10 @@
   (:require [clojure.test :refer :all])
   (:require [day24 :refer :all]))
 
-
-
-
 (deftest parse-row-test
   (is (= (parse-row "e") [:e]))
   (is (= (parse-row "nw") [:nw]))
-  (is (= (parse-row "seswneswswsenwwnwse") [:se :sw :ne :sw :sw :se :nw :w :nw :se])))
+  (is (= (parse-row "seswneswswse†nwwnwse") [:se :sw :ne :sw :sw :se :nw :w :nw :se])))
 
 
 (deftest navigate-test
@@ -26,4 +23,19 @@
 
 (deftest calc-blacks-test
   (is (= (count (calc-blacks example-data)) 10)))
+
+(deftest next-state-test
+  (is (=
+        (count (next-state (calc-blacks example-data)))
+        15))
+  (is (=
+        (count (nth
+                 (iterate next-state (calc-blacks example-data))
+                 100))
+        2208)))
+
+
+(deftest solve-2-test
+  (is (= (solve-2 (calc-blacks example-data))
+         2208)))
 
