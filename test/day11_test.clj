@@ -19,7 +19,9 @@
         [[:empty :floor] [:occupied :floor]])))
 
 (deftest occupied-neighbour-count-test
-  (is (= (occupied-neighbour-count [[:empty :occupied] [:occupied :occupied]] 0 0)) 3)
+  (is (=
+        (occupied-neighbour-count [[:empty :occupied] [:occupied :occupied]] 0 0)
+        3))
   (is
     (=
       (occupied-neighbour-count [[:empty :empty] [:occupied :occupied]] 0 0)

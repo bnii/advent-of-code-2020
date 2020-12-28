@@ -2,8 +2,6 @@
   (:require [clojure.test :refer :all])
   (:require [day3 :refer :all]))
 
-(deftest parse-test)
-
 (def example-data
   ["..##......."
    "#...#...#.."

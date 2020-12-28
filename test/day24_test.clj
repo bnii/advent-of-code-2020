@@ -5,7 +5,7 @@
 (deftest parse-row-test
   (is (= (parse-row "e") [:e]))
   (is (= (parse-row "nw") [:nw]))
-  (is (= (parse-row "seswneswswse†nwwnwse") [:se :sw :ne :sw :sw :se :nw :w :nw :se])))
+  (is (= (parse-row "seswneswswsenwwnwse") [:se :sw :ne :sw :sw :se :nw :w :nw :se])))
 
 
 (deftest navigate-test
